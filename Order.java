@@ -1,4 +1,5 @@
 import nl.uu.cs.treewidth.input.GraphInput.InputData;
+import nl.uu.cs.treewidth.algorithm.*;
 import nl.uu.cs.treewidth.ngraph.*;
 import java.util.stream.Stream;
 import java.util.ArrayList;
@@ -46,6 +47,8 @@ public class Order {
 
 	static public void main(String arg[]) throws java.io.IOException {
 
+		// Read input graph in NGraph format
+
 		NGraph<InputData> g = new ListGraph<InputData>();
 		HashSet<Integer> vertices = new HashSet<Integer>();
 		ArrayList<NVertex<InputData>> array = new ArrayList<NVertex<InputData>>();
@@ -53,5 +56,33 @@ public class Order {
 		try (Stream<String> lines = java.nio.file.Files.lines(java.nio.file.Paths.get(arg[0]))) {
 			lines.forEachOrdered(line -> process(line, g, vertices, array));
 		}
+
+		// Heuristc
+
+		UpperBound<InputData> ub = new GreedyDegree<InputData>();
+		//UpperBound<InputData> ub = new GreedyFillIn<InputData>();
+
+		ub.setInput(g);
+		ub.run();
+		System.out.println("Heuristic : " + ub.getName());
+		System.out.println("Treewidth : " + ub.getUpperBound());
+		System.out.println("");
+
+		// Exact (QuickBB)
+
+		QuickBB<InputData> qbb = new QuickBB<InputData>();
+		qbb.setInput(g);
+		qbb.run();
+		System.out.println("Exact     : " + qbb.getName());
+		System.out.println("Treewidth : " + qbb.getUpperBound());
+		System.out.println("");
+
+		// Exact (TreewidthDP)
+
+		TreewidthDP<InputData> twdp = new TreewidthDP<InputData>(ub.getUpperBound());
+		twdp.setInput(g);
+		twdp.run();
+		System.out.println("Exact     : " + twdp.getName());
+		System.out.println("Treewidth : " + twdp.getTreewidth());
 	}
 }
