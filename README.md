@@ -9,8 +9,8 @@ Voice must be executed by means of the [`voice.sh`](voice.sh) script, i.e.,
 ```
 ./voice.sh -i <filename> -o <filename>
 
--g	Input graph filename
--p	Outputs solution to file
+-i	Input graph filename
+-o	Outputs solution to file
 ```
 
 Acknowledgements
