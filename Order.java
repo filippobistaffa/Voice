@@ -43,8 +43,7 @@ public class Order {
 			lines.forEachOrdered(line -> process(line, g, array));
 		}
 
-		g.printGraph(true, false);
-
+		//g.printGraph(true, false);
 		Stopwatch stopwatch = new Stopwatch(new JavaNanoTime());
 
 		// Heuristc
