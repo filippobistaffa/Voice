@@ -48,8 +48,8 @@ public class Order {
 
 		// Heuristc
 
-		UpperBound<InputData> ub = new GreedyDegree<InputData>();
-		//UpperBound<InputData> ub = new GreedyFillIn<InputData>();
+		GreedyDegree<InputData> ub = new GreedyDegree<InputData>();
+		//GreedyFillIn<InputData> ub = new GreedyFillIn<InputData>();
 		stopwatch.reset();			
 		stopwatch.start();
 		ub.setInput(g);
