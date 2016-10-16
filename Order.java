@@ -1,4 +1,6 @@
 import nl.uu.cs.treewidth.input.GraphInput.InputData;
+import nl.uu.cs.treewidth.timing.JavaNanoTime;
+import nl.uu.cs.treewidth.timing.Stopwatch;
 import nl.uu.cs.treewidth.algorithm.*;
 import nl.uu.cs.treewidth.ngraph.*;
 import java.util.stream.Stream;
@@ -7,41 +9,26 @@ import java.util.HashSet;
 
 public class Order {
 
-	static private void process(String line, NGraph<InputData> g, HashSet<Integer> vertices,
-				    ArrayList<NVertex<InputData>> array) {
+	static private void process(String line, NGraph<InputData> g, ArrayList<NVertex<InputData>> array) {
 
 		int nspaces = line.length() - line.replace(" ", "").length();
 
-		if (nspaces > 0) {
+		if (nspaces == 0) {
 
-			NVertex<InputData> v1, v2;
+			int id = array.size();
+			NVertex<InputData> v = new ListVertex<InputData>();
+			v.data = new InputData();
+			v.data.id = id;
+			v.data.name = Integer.toString(id);
+			array.add(v);
+			g.addVertex(v);
+
+		} else {
+
 			String[] parts = line.split(" ");
-
-			int v1id = Integer.parseInt(parts[0]);
-			if (vertices.contains(v1id)) v1 = array.get(v1id);
-			else {
-				vertices.add(v1id);
-				v1 = new ListVertex<InputData>();
-				v1.data = new InputData();
-				v1.data.id = v1id;
-				v1.data.name = Integer.toString(v1id);
-				array.add(v1id, v1);
-				g.addVertex(v1);
-			}
-
-			int v2id = Integer.parseInt(parts[1]);
-			if (vertices.contains(v2id)) v2 = array.get(v2id);
-			else {
-				vertices.add(v2id);
-				v2 = new ListVertex<InputData>();
-				v2.data = new InputData();
-				v2.data.id = v2id;
-				v2.data.name = Integer.toString(v2id);
-				array.add(v2id, v2);
-				g.addVertex(v2);
-			}
-
-			g.addEdge(v1, v2);
+			int v1id = Integer.parseInt(parts[0].replaceAll("\\*", ""));
+			int v2id = Integer.parseInt(parts[1].replaceAll("\\*", ""));
+			g.addEdge(array.get(v1id), array.get(v2id));
 		}
 	}
 
@@ -50,39 +37,53 @@ public class Order {
 		// Read input graph in NGraph format
 
 		NGraph<InputData> g = new ListGraph<InputData>();
-		HashSet<Integer> vertices = new HashSet<Integer>();
 		ArrayList<NVertex<InputData>> array = new ArrayList<NVertex<InputData>>();
 
 		try (Stream<String> lines = java.nio.file.Files.lines(java.nio.file.Paths.get(arg[0]))) {
-			lines.forEachOrdered(line -> process(line, g, vertices, array));
+			lines.forEachOrdered(line -> process(line, g, array));
 		}
+
+		g.printGraph(true, false);
+
+		Stopwatch stopwatch = new Stopwatch(new JavaNanoTime());
 
 		// Heuristc
 
 		UpperBound<InputData> ub = new GreedyDegree<InputData>();
 		//UpperBound<InputData> ub = new GreedyFillIn<InputData>();
-
+		stopwatch.reset();			
+		stopwatch.start();
 		ub.setInput(g);
 		ub.run();
+		stopwatch.stop();
 		System.out.println("Heuristic : " + ub.getName());
 		System.out.println("Treewidth : " + ub.getUpperBound());
+		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
 		System.out.println("");
 
 		// Exact (QuickBB)
 
 		QuickBB<InputData> qbb = new QuickBB<InputData>();
+		stopwatch.reset();			
+		stopwatch.start();
 		qbb.setInput(g);
 		qbb.run();
+		stopwatch.stop();
 		System.out.println("Exact     : " + qbb.getName());
 		System.out.println("Treewidth : " + qbb.getUpperBound());
+		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
 		System.out.println("");
 
 		// Exact (TreewidthDP)
 
 		TreewidthDP<InputData> twdp = new TreewidthDP<InputData>(ub.getUpperBound());
+		stopwatch.reset();			
+		stopwatch.start();
 		twdp.setInput(g);
 		twdp.run();
+		stopwatch.stop();
 		System.out.println("Exact     : " + twdp.getName());
 		System.out.println("Treewidth : " + twdp.getTreewidth());
+		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
 	}
 }
