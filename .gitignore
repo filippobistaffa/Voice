@@ -1,0 +1,8 @@
+instance.h
+cobj
+dep
+voice
+
+*.isg
+*.sol
+*.log
