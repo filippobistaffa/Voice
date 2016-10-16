@@ -58,7 +58,10 @@ public class Order {
 		System.out.println("Heuristic : " + ub.getName());
 		System.out.println("Treewidth : " + ub.getUpperBound());
 		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
-		System.out.println("");
+		System.out.print("Order     : [ ");
+		for (NVertex<InputData> v : ub.getPermutation().order)
+			System.out.print(v.data.id + " ");
+		System.out.println("]\n");
 
 		// Exact (QuickBB)
 
