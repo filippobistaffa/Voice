@@ -15,4 +15,4 @@ Voice must be executed by means of the [`voice.sh`](voice.sh) script, i.e.,
 
 Acknowledgements
 ----------
-[LibTW](http://www.treewidth.com/treewidth) is employed to compute a tree decomposition of the input graph.
+[LibTW](http://www.treewidth.com/treewidth) is employed to compute the elimination ordering upon the tree decomposition of the input graph is built.
