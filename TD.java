@@ -67,6 +67,8 @@ public class TD {
 
 		// Exact (QuickBB)
 
+		/*
+
 		QuickBB<InputData> qbb = new QuickBB<InputData>();
 		stopwatch.reset();
 		stopwatch.start();
@@ -77,6 +79,8 @@ public class TD {
 		System.out.println("Treewidth : " + qbb.getUpperBound());
 		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
 		//System.out.println("");
+
+		*/
 
 		// Exact (TreewidthDP)
 
