@@ -8,7 +8,9 @@ import nl.uu.cs.treewidth.ngraph.*;
 import java.util.stream.Stream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Arrays;
+import java.util.Set;
 
 public class Order {
 
@@ -53,7 +55,7 @@ public class Order {
 
 		//GreedyDegree<InputData> ub = new GreedyDegree<InputData>();
 		GreedyFillIn<InputData> ub = new GreedyFillIn<InputData>();
-		stopwatch.reset();			
+		stopwatch.reset();
 		stopwatch.start();
 		ub.setInput(g);
 		ub.run();
@@ -63,19 +65,10 @@ public class Order {
 		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
 		NVertexOrder<InputData> order = ub.getPermutation();
 
-		PrintWriter writer = new PrintWriter(arg[1], "UTF-8");
-		//System.out.print("Order     : [ ");
-		for (NVertex<InputData> v : order.order) {
-			//System.out.print(v.data.id + " ");
-			writer.println(v.data.id);
-		}
-		//System.out.println("]");
-		writer.close();
-
 		// Exact (QuickBB)
 
 		QuickBB<InputData> qbb = new QuickBB<InputData>();
-		stopwatch.reset();			
+		stopwatch.reset();
 		stopwatch.start();
 		qbb.setInput(g);
 		qbb.run();
@@ -90,7 +83,7 @@ public class Order {
 		/*
 
 		TreewidthDP<InputData> twdp = new TreewidthDP<InputData>(ub.getUpperBound());
-		stopwatch.reset();			
+		stopwatch.reset();
 		stopwatch.start();
 		twdp.setInput(g);
 		twdp.run();
@@ -105,10 +98,38 @@ public class Order {
 		ptd.setInput(g);
 		ptd.run();
 		NGraph<NTDBag<InputData>> td = ptd.getDecomposition();
+		ArrayList<NTDBag<InputData>> tdvertices = new ArrayList<NTDBag<InputData>>();
+		PrintWriter writer = new PrintWriter(arg[1], "UTF-8");
+		writer.println(td.getNumberOfVertices());
+
+		for (Iterator<NVertex<NTDBag<InputData>>> it = td.getVertices(); it.hasNext();) {
+			NTDBag<InputData> ntdb = it.next().data;
+			tdvertices.add(ntdb);
+			Set<NVertex<InputData>> set = ntdb.vertices;
+			Integer[] buf = new Integer[set.size()];
+			int i = 0;
+			for (NVertex<InputData> v : set) buf[i++] = v.data.id;
+			String str = Arrays.toString(buf).replace(",", "");
+			writer.println(str.substring(1, str.length() - 1));
+		}
+
+		for (Iterator<NVertex<NTDBag<InputData>>> it = td.getVertices(); it.hasNext();) {
+			NVertex<NTDBag<InputData>> ntdv = it.next();
+			Integer[] buf = new Integer[ntdv.getNumberOfNeighbors()];
+			int i = 0;
+			for (Iterator<NVertex<NTDBag<InputData>>> itn = ntdv.getNeighbors(); itn.hasNext();) {
+				NVertex<NTDBag<InputData>> neigh = itn.next();
+				buf[i++] = tdvertices.indexOf(neigh.data);
+			}
+			String str = Arrays.toString(buf).replace(",", "");
+			writer.println(str.substring(1, str.length() - 1));
+		}
+
+		writer.close();
 
 		//String dotg = DotWriter.format(g);
 		//NeatoViewer.present(dotg, "", 0, 0, false, true);
-		
+
 		//String dottd = DotWriter.formatTD(td);
 		//NeatoViewer.present(dottd, "", 500, 0, false, true);
 	}
