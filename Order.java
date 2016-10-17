@@ -59,9 +59,11 @@ public class Order {
 		System.out.println("Heuristic : " + ub.getName());
 		System.out.println("Treewidth : " + ub.getUpperBound());
 		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
+		NVertexOrder<InputData> order = ub.getPermutation();
+
 		PrintWriter writer = new PrintWriter(arg[1], "UTF-8");
 		//System.out.print("Order     : [ ");
-		for (NVertex<InputData> v : ub.getPermutation().order) {
+		for (NVertex<InputData> v : order.order) {
 			//System.out.print(v.data.id + " ");
 			writer.println(v.data.id);
 		}
