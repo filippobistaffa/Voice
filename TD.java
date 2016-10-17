@@ -48,7 +48,6 @@ public class TD {
 			lines.forEachOrdered(line -> process(line, g, array));
 		}
 
-		//g.printGraph(true, false);
 		Stopwatch stopwatch = new Stopwatch(new JavaNanoTime());
 
 		// Heuristc
