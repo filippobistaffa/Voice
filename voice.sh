@@ -41,11 +41,11 @@ if [ -z "${i}" ]; then
 	usage
 fi
 
-order=`mktemp`
+td=`mktemp`
 
-java -cp .:* Order "$i" $order
+java -cp .:* TD "$i" $td
 
-cat $order
+cat $td
 
 tmp=`mktemp`
 
@@ -84,4 +84,4 @@ then
 	#$bin $i
 fi
 
-rm $order
+rm $td

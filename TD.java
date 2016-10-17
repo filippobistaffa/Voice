@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.Arrays;
 import java.util.Set;
 
-public class Order {
+public class TD {
 
 	static private void process(String line, NGraph<InputData> g, ArrayList<NVertex<InputData>> array) {
 

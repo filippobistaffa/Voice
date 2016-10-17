@@ -52,9 +52,9 @@ voice: ${COBJSUBDIR}/voice.o
 	@${ECHOLD} voice
 	@${CMP} ${OPT} ${LDIR} $^ ${LINK} -o ${OUT}
 
-order:
-	@${ECHOJC} Order
-	@javac -cp .:* Order.java
+td:
+	@${ECHOJC} TD
+	@javac -cp .:* TD.java
 
 clean:
 	@echo "Removing subdirectories..."
