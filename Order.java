@@ -60,12 +60,12 @@ public class Order {
 		System.out.println("Treewidth : " + ub.getUpperBound());
 		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
 		PrintWriter writer = new PrintWriter(arg[1], "UTF-8");
-		System.out.print("Order     : [ ");
+		//System.out.print("Order     : [ ");
 		for (NVertex<InputData> v : ub.getPermutation().order) {
-			System.out.print(v.data.id + " ");
+			//System.out.print(v.data.id + " ");
 			writer.println(v.data.id);
 		}
-		System.out.println("]\n");
+		//System.out.println("]");
 		writer.close();
 
 		// Exact (QuickBB)
@@ -79,9 +79,11 @@ public class Order {
 		System.out.println("Exact     : " + qbb.getName());
 		System.out.println("Treewidth : " + qbb.getUpperBound());
 		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
-		System.out.println("");
+		//System.out.println("");
 
 		// Exact (TreewidthDP)
+
+		/*
 
 		TreewidthDP<InputData> twdp = new TreewidthDP<InputData>(ub.getUpperBound());
 		stopwatch.reset();			
@@ -92,5 +94,7 @@ public class Order {
 		System.out.println("Exact     : " + twdp.getName());
 		System.out.println("Treewidth : " + twdp.getTreewidth());
 		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
+
+		*/
 	}
 }
