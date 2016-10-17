@@ -1,5 +1,7 @@
 import nl.uu.cs.treewidth.input.GraphInput.InputData;
 import nl.uu.cs.treewidth.timing.JavaNanoTime;
+import nl.uu.cs.treewidth.output.NeatoViewer;
+import nl.uu.cs.treewidth.output.DotWriter;
 import nl.uu.cs.treewidth.timing.Stopwatch;
 import nl.uu.cs.treewidth.algorithm.*;
 import nl.uu.cs.treewidth.ngraph.*;
@@ -98,5 +100,16 @@ public class Order {
 		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
 
 		*/
+
+		PermutationToTreeDecomposition<InputData> ptd = new PermutationToTreeDecomposition<InputData>(order);
+		ptd.setInput(g);
+		ptd.run();
+		NGraph<NTDBag<InputData>> td = ptd.getDecomposition();
+
+		//String dotg = DotWriter.format(g);
+		//NeatoViewer.present(dotg, "", 0, 0, false, true);
+		
+		//String dottd = DotWriter.formatTD(td);
+		//NeatoViewer.present(dottd, "", 500, 0, false, true);
 	}
 }
