@@ -41,6 +41,12 @@ if [ -z "${i}" ]; then
 	usage
 fi
 
+order=`mktemp`
+
+java -cp .:* Order "$i" $order
+
+cat $order
+
 tmp=`mktemp`
 
 e=`cat "$i" | wc -l`
@@ -77,3 +83,5 @@ then
 	bin=${bin%???}
 	#$bin $i
 fi
+
+rm $order
