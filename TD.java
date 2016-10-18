@@ -127,7 +127,6 @@ public class TD {
 				if (k > i) buf[j++] = k;
 			}
 			String str = Arrays.toString(buf).replace(",", "");
-			System.out.println(str);
 			writer.println(str.substring(1, str.length() - 1));
 			i++;
 		}
