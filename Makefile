@@ -48,9 +48,15 @@ all: voice
 
 -include ${DEPSUBDIR}/*.d
 
-voice: ${COBJSUBDIR}/voice.o
+voice: ${COBJSUBDIR}/voice.o ${COBJSUBDIR}/io.o 
 	@${ECHOLD} voice
 	@${CMP} ${OPT} ${LDIR} $^ ${LINK} -o ${OUT}
+
+${COBJSUBDIR}/voice.o: voice.cpp
+	@$(compilec)
+
+${COBJSUBDIR}/io.o: io.cpp
+	@$(compilec)
 
 td:
 	@${ECHOJC} TD

@@ -42,10 +42,8 @@ if [ -z "${i}" ]; then
 fi
 
 td=`mktemp`
-
 java -cp .:* TD "$i" $td
-
-cat $td
+ntd=`sed '1q;d' $td`
 
 tmp=`mktemp`
 
@@ -54,6 +52,7 @@ n=`grep -v " " "$i" | wc -l`
 e=$(( $e - $n ))
 echo "#define E $e" > $tmp
 echo "#define N $n" >> $tmp
+echo "#define NTD $ntd" >> $tmp
 
 if [ ! -z $out ]
 then
@@ -75,13 +74,13 @@ else
 	fi
 fi
 
-#make -j
+make -j
 
 if [[ $? == 0 ]]
 then
 	bin=$0
 	bin=${bin%???}
-	#$bin $i
+	$bin $i $td
 fi
 
 rm $td
