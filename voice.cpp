@@ -3,12 +3,12 @@
 int main(int argc, char *argv[]) {
 
 	// Allocate data structures
-	edge *isg = (edge *)malloc(sizeof(edge) * N * N);
-	value *v = (value *)malloc(sizeof(value) * E);
-	value *s = (value *)malloc(sizeof(value) * N);
-	chunk *l = (chunk *)calloc(C, sizeof(chunk));
-	agent *tv = (edge *)malloc(sizeof(edge) * NTD * NTD);
-	agent *td = (edge *)malloc(sizeof(edge) * NTD * NTD);
+	edge *isg = (edge *)malloc(sizeof(edge) * N * N);	// adjacency matrix
+	value *v = (value *)malloc(sizeof(value) * E);		// edge weights
+	value *s = (value *)malloc(sizeof(value) * N);		// self-loop weights
+	chunk *l = (chunk *)calloc(C, sizeof(chunk));		// leaders bitmask
+	vector<set<agent> > tv(NTD, set<agent>());		// tree decomposition vertices
+	vector<set<agent> > td(NTD, set<agent>());		// tree decomposition descendants
 
 	// Read graph file
 
@@ -31,19 +31,17 @@ int main(int argc, char *argv[]) {
 	puts("\nTree decomposition vertices");
 	for (agent i = 0; i < NTD; i++) {
 		printf("%u: ", i);
-		printbuf(tv + i * NTD + 1, tv[i * NTD]);
+		printset(tv[i]);
 	}
 	puts("\nDescendants in tree decomposition");
 	for (agent i = 0; i < NTD; i++) {
 		printf("%u: ", i);
-		printbuf(td + i * NTD + 1, td[i * NTD]);
+		printset(td[i]);
 	}
 	puts("");
 	#endif
 
 	free(isg);
-	free(tv);
-	free(td);
 	free(v);
 	free(s);
 	free(l);

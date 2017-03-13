@@ -26,33 +26,29 @@ void readg(const char *fn, edge *g, value *s, value *v, chunk *l) {
 	fclose(f);
 }
 
-void readtd(const char *fn, agent *tv, agent *td) {
+void readtd(const char *fn, vector<set<agent> > &tv, vector<set<agent> > &td) {
 
 	FILE *f = fopen(fn, "r");
 
 	// Skip first line
 	fgets(line, MAXLINE, f);
 
-	for (agent i = 0, *p = tv; i < NTD; ++i) {
-		*p = 0;
+	for (agent i = 0; i < NTD; ++i) {
 		fgets(line, MAXLINE, f);
 		char *pch = strtok(line, " ");
 		while (pch != NULL) {
-			p[(*p)++ + 1] = atoi(pch);
+			tv[i].insert(atoi(pch));
 			pch = strtok(NULL, " ");
 		}
-		p += NTD;
 	}
 
-	for (agent i = 0, *p = td; i < NTD; ++i) {
-		*p = 0;
+	for (agent i = 0; i < NTD; ++i) {
 		fgets(line, MAXLINE, f);
 		if (strlen(line) == 1) continue;
 		char *pch = strtok(line, " ");
 		while (pch != NULL) {
-			p[(*p)++ + 1] = atoi(pch);
+			td[i].insert(atoi(pch));
 			pch = strtok(NULL, " ");
 		}
-		p += NTD;
 	}
 }
