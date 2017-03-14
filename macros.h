@@ -50,38 +50,4 @@
 #define ONES(V, I, C) do { const unsigned _mi = MODBPC(I); for (unsigned _i = 0; _i < (C); _i++) (V)[_i] = ~ZERO; \
 			   if (_mi) (V)[(C) - 1] = (ONE << _mi) - 1; } while (0)
 
-using namespace std;
-
-// Prints the content of a buffer
-
-#include <iostream>
-template <typename type>
-__attribute__((always_inline)) inline
-void printbuf(const type *buf, unsigned n, const char *name = NULL, const char *format = NULL, const char *after = NULL) {
-
-	if (name) printf("%s = [ ", name);
-	else printf("[ ");
-	while (n--) {
-		if (format) { printf(format, *(buf++)); printf(" "); }
-		else cout << *(buf++) << " ";
-	}
-	printf("]%s", (after) ? after : "\n");
-}
-
-// Prints the content of a set
-
-#include <set>
-template <typename type>
-__attribute__((always_inline)) inline
-void printset(const set<type> &s, const char *name = NULL, const char *format = NULL, const char *after = NULL) {
-
-	if (name) printf("%s = [ ", name);
-	else printf("[ ");
-	for (typename set<type>::const_iterator it = s.begin(); it != s.end(); ++it) {
-		if (format) { printf(format, *it); printf(" "); }
-		else cout << *it << " ";
-	}
-	printf("]%s", (after) ? after : "\n");
-}
-
 #endif  /* MACROS_H_ */
