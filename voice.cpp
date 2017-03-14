@@ -7,8 +7,8 @@ int main(int argc, char *argv[]) {
 	value *v = (value *)malloc(sizeof(value) * E);		// edge weights
 	value *s = (value *)malloc(sizeof(value) * N);		// self-loop weights
 	chunk *l = (chunk *)calloc(C, sizeof(chunk));		// leaders bitmask
-	vector<set<agent> > tv(NTD, set<agent>());		// tree decomposition vertices
-	vector<set<agent> > td(NTD, set<agent>());		// tree decomposition descendants
+	vector<set<agent> > X(NTD, set<agent>());		// tree decomposition vertices
+	vector<set<agent> > D(NTD, set<agent>());		// tree decomposition descendants
 
 	// Read graph file
 
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 
 	// Read tree decomposition
 
-	readtd(argv[2], tv, td);
+	readtd(argv[2], X, D);
 
 	#ifdef DEBUG
 	puts("Singletons");
@@ -31,12 +31,12 @@ int main(int argc, char *argv[]) {
 	puts("\nTree decomposition vertices");
 	for (agent i = 0; i < NTD; i++) {
 		printf("%u: ", i);
-		printset(tv[i]);
+		printset(X[i]);
 	}
 	puts("\nDescendants in tree decomposition");
 	for (agent i = 0; i < NTD; i++) {
 		printf("%u: ", i);
-		printset(td[i]);
+		printset(D[i]);
 	}
 	puts("");
 	#endif
