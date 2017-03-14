@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 	puts("");
 	#endif
 
-	set<agent> p, q;
+	/*set<agent> p, q;
 	agent pbuf[] = {1, 2, 3};
 	agent qbuf[] = {3, 4, 5};
 	p.insert(pbuf, pbuf + 3);
@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
 
 	set<set<agent> > qcalq;
 	cal(qcal, qp, qcalq);
-	printsos(qcalq, "qcalq");
+	printsos(qcalq, "qcalq");*/
 
 	vector<set<agent> > Y(NTD, set<agent>());
 	vector<set<agent> > Z(NTD, set<agent>());
