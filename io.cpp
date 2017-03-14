@@ -26,7 +26,7 @@ void readg(const char *fn, edge *g, value *s, value *v, chunk *l) {
 	fclose(f);
 }
 
-void readtd(const char *fn, vector<set<agent> > &tv/*, vector<set<agent> > &td*/) {
+void readtd(const char *fn, vector<set<agent> > &tv, vector<set<agent> > &td) {
 
 	FILE *f = fopen(fn, "r");
 
@@ -42,7 +42,7 @@ void readtd(const char *fn, vector<set<agent> > &tv/*, vector<set<agent> > &td*/
 		}
 	}
 
-	/*for (agent i = 0; i < NTD; ++i) {
+	for (agent i = 0; i < NTD; ++i) {
 		fgets(line, MAXLINE, f);
 		if (strlen(line) == 1) continue;
 		char *pch = strtok(line, " ");
@@ -50,5 +50,5 @@ void readtd(const char *fn, vector<set<agent> > &tv/*, vector<set<agent> > &td*/
 			td[i].insert(atoi(pch));
 			pch = strtok(NULL, " ");
 		}
-	}*/
+	}
 }

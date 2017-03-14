@@ -146,21 +146,20 @@ public class TD {
 			writer.println(str.substring(1, str.length() - 1));
 		}
 
-		/*
+		i = 0;
 		for (Iterator<NVertex<NTDBag<InputData>>> it = td.getVertices(); it.hasNext();) {
 			NVertex<NTDBag<InputData>> ntdv = it.next();
 			Integer[] buf = new Integer[ntdv.getNumberOfNeighbors() - (i == 0 ? 0 : 1)];
 			int j = 0;
 			for (Iterator<NVertex<NTDBag<InputData>>> itn = ntdv.getNeighbors(); itn.hasNext();) {
 				NVertex<NTDBag<InputData>> neigh = itn.next();
-				int k = tdvertices.indexOf(neigh.data);
+				int k = tdvo.indexOf(neigh.data);
 				if (k > i) buf[j++] = k;
 			}
 			String str = Arrays.toString(buf).replace(",", "");
 			writer.println(str.substring(1, str.length() - 1));
 			i++;
 		}
-		*/
 
 		writer.close();
 
