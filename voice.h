@@ -10,5 +10,6 @@
 
 // Modules
 #include "io.h"
+#include "set.h"
 
 #endif /* VOICE_H_ */
