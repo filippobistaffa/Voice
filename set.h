@@ -15,4 +15,6 @@ using namespace std;
 void U(const set<set<agent> > &pcal, const set<agent> &p, const set<set<agent> > &qcal, const set<agent> &q,
        set<set<agent> > &res);
 
+void cal(const set<set<agent> > &pcal, const set<agent> &p, set<set<agent> > &res);
+
 #endif /* SET_H_ */

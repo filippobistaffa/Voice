@@ -76,6 +76,28 @@ int main(int argc, char *argv[]) {
 	set<set<agent> > u;
 	U(pcal, p, qcal, q, u);
 	printsos(u, "u");
+	puts("");
+
+	agent ppbuf[] = {1, 2};
+	set<agent> pp;
+	pp.insert(ppbuf, ppbuf + 2);
+	printset(pp, "pp");
+	puts("");
+
+	set<set<agent> > pcalp;
+	cal(pcal, pp, pcalp);
+	printsos(pcalp, "pcalp");
+	puts("");
+
+	agent qpbuf[] = {4, 5};
+	set<agent> qp;
+	qp.insert(qpbuf, qpbuf + 2);
+	printset(qp, "qp");
+	puts("");
+
+	set<set<agent> > qcalq;
+	cal(qcal, qp, qcalq);
+	printsos(qcalq, "qcalq");
 
 	free(isg);
 	free(v);
