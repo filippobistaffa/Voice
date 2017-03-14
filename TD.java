@@ -6,10 +6,13 @@ import nl.uu.cs.treewidth.timing.Stopwatch;
 import nl.uu.cs.treewidth.algorithm.*;
 import nl.uu.cs.treewidth.ngraph.*;
 import java.util.stream.Stream;
+import java.util.Collections;
+import java.util.Comparator;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Arrays;
+import java.awt.Point;
 import java.util.Set;
 
 public class TD {
@@ -101,22 +104,49 @@ public class TD {
 		ptd.setInput(g);
 		ptd.run();
 		NGraph<NTDBag<InputData>> td = ptd.getDecomposition();
-		ArrayList<NTDBag<InputData>> tdvertices = new ArrayList<NTDBag<InputData>>();
-		PrintWriter writer = new PrintWriter(arg[1], "UTF-8");
-		writer.println(td.getNumberOfVertices());
+		ArrayList<NTDBag<InputData>> tdvertices = new ArrayList<NTDBag<InputData>>(td.getNumberOfVertices());
+		ArrayList<Point> points = new ArrayList<Point>(td.getNumberOfVertices());
 
+		int i = 0;
 		for (Iterator<NVertex<NTDBag<InputData>>> it = td.getVertices(); it.hasNext();) {
 			NTDBag<InputData> ntdb = it.next().data;
 			tdvertices.add(ntdb);
+			points.add(new Point(i++, 0));
+		}
+
+		i = 0;
+		for (Iterator<NVertex<NTDBag<InputData>>> it = td.getVertices(); it.hasNext();) {
+			NVertex<NTDBag<InputData>> ntdv = it.next();
+			for (Iterator<NVertex<NTDBag<InputData>>> itn = ntdv.getNeighbors(); itn.hasNext();) {
+				NVertex<NTDBag<InputData>> neigh = itn.next();
+				int j = tdvertices.indexOf(neigh.data);
+				if (j > i) points.get(j).y = points.get(i).y + 1;
+			}
+			i++;
+		}
+
+		Collections.sort(points, new Comparator<Point>() { 
+			public int compare(Point o1, Point o2) { return Integer.compare(o1.y, o2.y); }
+		});
+
+		ArrayList<NTDBag<InputData>> tdvo = new ArrayList<NTDBag<InputData>>();
+
+		for (i = 0; i < points.size(); i++)
+			tdvo.add(tdvertices.get(points.get(i).x));
+
+		PrintWriter writer = new PrintWriter(arg[1], "UTF-8");
+		writer.println(td.getNumberOfVertices());
+
+		for (NTDBag<InputData> ntdb : tdvo) {
 			Set<NVertex<InputData>> set = ntdb.vertices;
 			Integer[] buf = new Integer[set.size()];
-			int i = 0;
+			i = 0;
 			for (NVertex<InputData> v : set) buf[i++] = v.data.id;
 			String str = Arrays.toString(buf).replace(",", "");
 			writer.println(str.substring(1, str.length() - 1));
 		}
 
-		int i = 0;
+		/*
 		for (Iterator<NVertex<NTDBag<InputData>>> it = td.getVertices(); it.hasNext();) {
 			NVertex<NTDBag<InputData>> ntdv = it.next();
 			Integer[] buf = new Integer[ntdv.getNumberOfNeighbors() - (i == 0 ? 0 : 1)];
@@ -130,6 +160,7 @@ public class TD {
 			writer.println(str.substring(1, str.length() - 1));
 			i++;
 		}
+		*/
 
 		writer.close();
 

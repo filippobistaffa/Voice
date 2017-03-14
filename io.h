@@ -62,6 +62,6 @@ void readg(const char *fn, edge *g, value *s, value *v, chunk *l);
 
 // Reads the tree decomposition file
 
-void readtd(const char *fn, vector<set<agent> > &tv, vector<set<agent> > &td);
+void readtd(const char *fn, vector<set<agent> > &tv/*, vector<set<agent> > &td*/);
 
 #endif /* IO_H_ */
