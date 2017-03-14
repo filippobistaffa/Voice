@@ -45,6 +45,17 @@ void printset(const set<type> &s, const char *name = NULL, const char *format = 
 	printf("]%s", (after) ? after : "\n");
 }
 
+// Prints a set of sets
+
+template <typename type>
+__attribute__((always_inline)) inline
+void printsos(const set<set<type> > &sos, const char *name = NULL) {
+
+	if (name) cout << name << ":" << endl;
+	for (typename set<set<type> >::const_iterator it = sos.begin(); it != sos.end(); ++it)
+		printset(*it);
+}
+
 // Reads the graph file
 
 void readg(const char *fn, edge *g, value *s, value *v, chunk *l);
