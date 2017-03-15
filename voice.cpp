@@ -30,12 +30,12 @@ int main(int argc, char *argv[]) {
 		printbuf(isg + i * N, N, NULL, "% 2u");
 	puts("\nTree decomposition vertices");
 	for (agent i = 0; i < NTD; i++) {
-		printf("%u: ", i);
+		printf("X_%u = ", i);
 		printset(X[i]);
 	}
 	puts("\nDescendants in tree decomposition");
 	for (agent i = 0; i < NTD; i++) {
-		printf("%u: ", i);
+		printf("D_%u = ", i);
 		printset(D[i]);
 	}
 	puts("");
@@ -111,10 +111,12 @@ int main(int argc, char *argv[]) {
 
 	for (agent i = 0; i < NTD; i++) {
 		SETOP(set_difference, X[i], Y[i], Z[i]);
+		#ifdef DEBUG
 		printf("Y_%u = ", i);
 		printset(Y[i]);
 		printf("Z_%u = ", i);
 		printset(Z[i]);
+		#endif
 	}
 
 	free(isg);
