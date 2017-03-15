@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
 		printf("%u = %f\n", i, s[i]);
 	puts("\nEdges");
 	for (agent i = 0; i < E; i++)
-		printf("%u = %f\n", i + N, v[i]);
+		printf("%u = %f\n", i + 1, v[i]);
 	puts("\nAdjacency matrix");
 	for (agent i = 0; i < N; i++)
 		printbuf(isg + i * N, N, NULL, "% 2u");

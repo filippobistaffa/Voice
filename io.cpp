@@ -20,7 +20,7 @@ void readg(const char *fn, edge *g, value *s, value *v, chunk *l) {
 	for (agent i = 0; i < E; i++) {
 		agent v1, v2;
 		fscanf(f, "%u %u %f", &v1, &v2, v + i);
-		g[v2 * N + v1] = g[v1 * N + v2] = N + i;
+		g[v2 * N + v1] = g[v1 * N + v2] = i + 1;
 	}
 
 	fclose(f);
