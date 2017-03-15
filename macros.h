@@ -11,9 +11,6 @@
 #define GT(X, Y) (*(X) > *(Y))
 #define GE(X, Y) (*(X) >= *(Y))
 
-#define X(V, I) ((V)[2 * (I)])
-#define Y(V, I) ((V)[2 * (I) + 1])
-
 #define DIVBPC(X) ((X) / BITSPERCHUNK)
 #define MODBPC(X) ((X) % BITSPERCHUNK)
 #define CEILBPC(X) CEIL(X, BITSPERCHUNK)
