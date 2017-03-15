@@ -48,7 +48,7 @@ all: voice
 
 -include ${DEPSUBDIR}/*.d
 
-voice: ${COBJSUBDIR}/voice.o ${COBJSUBDIR}/io.o ${COBJSUBDIR}/set.o
+voice: ${COBJSUBDIR}/voice.o ${COBJSUBDIR}/io.o ${COBJSUBDIR}/set.o ${COBJSUBDIR}/cfss.o
 	@${ECHOLD} voice
 	@${CMP} ${OPT} ${LDIR} $^ ${LINK} -o ${OUT}
 
@@ -59,6 +59,9 @@ ${COBJSUBDIR}/io.o: io.cpp
 	@$(compilec)
 
 ${COBJSUBDIR}/set.o: set.cpp
+	@$(compilec)
+
+${COBJSUBDIR}/cfss.o: cfss.cpp
 	@$(compilec)
 
 td:

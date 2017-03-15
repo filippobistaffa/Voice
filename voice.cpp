@@ -3,16 +3,13 @@
 int main(int argc, char *argv[]) {
 
 	// Allocate data structures
-	edge *isg = (edge *)malloc(sizeof(edge) * N * N);	// adjacency matrix
-	value *v = (value *)malloc(sizeof(value) * E);		// edge weights
-	value *s = (value *)malloc(sizeof(value) * N);		// self-loop weights
-	chunk *l = (chunk *)calloc(C, sizeof(chunk));		// leaders bitmask
+	stack *st = (stack *)malloc(sizeof(stack) * N);		// stack
 	vector<set<agent> > X(NTD, set<agent>());		// tree decomposition vertices
 	vector<set<agent> > D(NTD, set<agent>());		// tree decomposition descendants
 
 	// Read graph file
 
-	readg(argv[1], isg, s, v, l);
+	readg(argv[1], st->g, st->a, st->vs, st->ve/*, st->l*/);
 
 	// Read tree decomposition
 
@@ -21,13 +18,13 @@ int main(int argc, char *argv[]) {
 	#ifdef DEBUG
 	puts("Singletons");
 	for (agent i = 0; i < N; i++)
-		printf("%u = %f\n", i, s[i]);
+		printf("%u = %f\n", i, st->vs[i]);
 	puts("\nEdges");
-	for (agent i = 0; i < E; i++)
-		printf("%u = %f\n", i + 1, v[i]);
+	for (edge i = 1; i < E + 1; i++)
+		printf("%u (%u, %u) = %f\n", i, XV(st->a, i), YV(st->a, i), st->ve[i]);
 	puts("\nAdjacency matrix");
 	for (agent i = 0; i < N; i++)
-		printbuf(isg + i * N, N, NULL, "% 2u");
+		printbuf(st->g + i * N, N, NULL, "% 2u");
 	puts("\nTree decomposition vertices");
 	for (agent i = 0; i < NTD; i++) {
 		printf("X_%u = ", i);
@@ -119,10 +116,48 @@ int main(int argc, char *argv[]) {
 		#endif
 	}
 
-	free(isg);
-	free(v);
-	free(s);
-	free(l);
+	#ifdef DEBUG
+	puts("");
+	#endif
+	value vi[NTD];
+	
+	// initialise stack for CFSS
+
+	st->n[N] = N;
+
+	for (agent i = 0; i < N; i++) {
+		XV(st->s, i) = 1;
+		YV(st->s, i) = st->cs[i] = i;
+		st->n[st->n[i] = N + i + 1] = i;
+	}
+
+	for (int i = NTD - 1; i >= 0; i--) {
+
+		#ifdef DEBUG
+		printf("Z_%u = ", i);
+		printset(Z[i]);
+		#endif
+		memset(st->m, 0, sizeof(chunk) * CMNE);
+		memset(st->c, 0, sizeof(chunk) * CMNE);
+
+		for (set<agent>::const_iterator it = Z[i].begin(); it != Z[i].end(); ++it)
+			SET(st->m, *it);
+
+		for (edge j = 1; j < E + 1; j++)
+			if ((Z[i].find(XV(st->a, j)) != Z[i].end()) && (Z[i].find(YV(st->a, j)) != Z[i].end()))
+				SET(st->c, j);
+
+		#ifdef DEBUG
+		bitset<BITSPERCHUNK> bsm(st->m[0]);
+		cout << "st->m = " << bsm << endl;
+		bitset<BITSPERCHUNK> bsc(st->c[0]);
+		cout << "st->c = " << bsc << endl << endl;
+		#endif
+
+		cfss(st);
+	}
+
+	free(st);
 
 	return 0;
 }

@@ -3,7 +3,7 @@
 #define MAXLINE 1000
 static char line[MAXLINE];
 
-void readg(const char *fn, edge *g, value *s, value *v, chunk *l) {
+void readg(const char *fn, edge *g, agent *a, value *vs, value *ve/*, chunk *l*/) {
 
 	FILE *f = fopen(fn, "r");
 
@@ -11,16 +11,18 @@ void readg(const char *fn, edge *g, value *s, value *v, chunk *l) {
 		fgets(line, MAXLINE, f);
 		char *pch = line;
 		if (*pch == '*') {
-			SET(l, i);
+			//SET(l, i);
 			pch++;
 		}
-		s[i] = atof(pch);
+		vs[i] = atof(pch);
 	}
 
-	for (agent i = 0; i < E; i++) {
+	for (agent i = 1; i < E + 1; i++) {
 		agent v1, v2;
-		fscanf(f, "%u %u %f", &v1, &v2, v + i);
-		g[v2 * N + v1] = g[v1 * N + v2] = i + 1;
+		fscanf(f, "%u %u %f", &v1, &v2, ve + i);
+		g[v2 * N + v1] = g[v1 * N + v2] = i;
+		XV(a, i) = v1;
+		YV(a, i) = v2;
 	}
 
 	fclose(f);

@@ -58,7 +58,7 @@ void printsos(const set<set<type> > &sos, const char *name = NULL) {
 
 // Reads the graph file
 
-void readg(const char *fn, edge *g, value *s, value *v, chunk *l);
+void readg(const char *fn, edge *g, agent *a, value *vs, value *ve/*, chunk *l*/);
 
 // Reads the tree decomposition file
 
