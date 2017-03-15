@@ -105,12 +105,12 @@ int main(int argc, char *argv[]) {
 	Y[0] = XU[0] = X[0];
 
 	for (agent i = 1; i < NTD; i++) {
-		set_union(XU[i - 1].begin(), XU[i - 1].end(), X[i].begin(), X[i].end(), inserter(XU[i], XU[i].begin()));
-		set_difference(X[i].begin(), X[i].end(), XU[i - 1].begin(), XU[i - 1].end(), inserter(Y[i], Y[i].begin()));
+		SETOP(set_union, XU[i - 1], X[i], XU[i]);
+		SETOP(set_difference, X[i], XU[i - 1], Y[i]);
 	}
 
 	for (agent i = 0; i < NTD; i++) {
-		set_difference(X[i].begin(), X[i].end(), Y[i].begin(), Y[i].end(), inserter(Z[i], Z[i].begin()));
+		SETOP(set_difference, X[i], Y[i], Z[i]);
 		printf("Y_%u = ", i);
 		printset(Y[i]);
 		printf("Z_%u = ", i);
