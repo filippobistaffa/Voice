@@ -12,6 +12,8 @@
 
 #define CONTAINS(V, I) ((V)[I] <= (V)[N] + N)
 
+void initstack(stack *st);
+
 void maskagents(const set<agent> &s, stack *st);
 
 void cfss(stack *st);

@@ -122,14 +122,7 @@ int main(int argc, char *argv[]) {
 	value vi[NTD];
 	
 	// initialise stack for CFSS
-
-	st->n[N] = N;
-
-	for (agent i = 0; i < N; i++) {
-		XV(st->s, i) = 1;
-		YV(st->s, i) = st->cs[i] = i;
-		st->n[st->n[i] = N + i + 1] = i;
-	}
+	initstack(st);
 
 	for (int i = NTD - 1; i >= 0; i--) {
 
