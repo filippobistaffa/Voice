@@ -1,5 +1,18 @@
 #include "cfss.h"
 
+void maskagents(const set<agent> &s, stack *st) {
+
+	memset(st->m, 0, sizeof(chunk) * CMNE);
+	memset(st->c, 0, sizeof(chunk) * CMNE);
+
+	for (set<agent>::const_iterator it = s.begin(); it != s.end(); ++it)
+		SET(st->m, *it);
+
+	for (edge j = 1; j < E + 1; j++)
+		if ((s.find(XV(st->a, j)) != s.end()) && (s.find(YV(st->a, j)) != s.end()))
+			SET(st->c, j);
+}
+
 // Contract edge between v1 and v2
 
 __attribute__((always_inline)) inline

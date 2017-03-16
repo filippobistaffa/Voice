@@ -133,21 +133,11 @@ int main(int argc, char *argv[]) {
 
 	for (int i = NTD - 1; i >= 0; i--) {
 
+		maskagents(Z[i], st);
+
 		#ifdef DEBUG
 		printf("Z_%u = ", i);
 		printset(Z[i]);
-		#endif
-		memset(st->m, 0, sizeof(chunk) * CMNE);
-		memset(st->c, 0, sizeof(chunk) * CMNE);
-
-		for (set<agent>::const_iterator it = Z[i].begin(); it != Z[i].end(); ++it)
-			SET(st->m, *it);
-
-		for (edge j = 1; j < E + 1; j++)
-			if ((Z[i].find(XV(st->a, j)) != Z[i].end()) && (Z[i].find(YV(st->a, j)) != Z[i].end()))
-				SET(st->c, j);
-
-		#ifdef DEBUG
 		bitset<BITSPERCHUNK> bsm(st->m[0]);
 		cout << "st->m = " << bsm << endl;
 		bitset<BITSPERCHUNK> bsc(st->c[0]);

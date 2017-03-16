@@ -12,6 +12,8 @@
 
 #define CONTAINS(V, I) ((V)[I] <= (V)[N] + N)
 
+void maskagents(const set<agent> &s, stack *st);
+
 void cfss(stack *st);
 
 #endif /* CFSS_H_ */
