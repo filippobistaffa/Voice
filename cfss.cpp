@@ -13,6 +13,22 @@ void maskagents(const set<agent> &s, stack *st) {
 			SET(st->c, j);
 }
 
+__attribute__((always_inline)) inline
+void cs2sos(stack *st, set<set<agent> > &sos) {
+
+	const agent *p = st->n + N + 1;
+        agent i, m = st->n[N];
+
+	do {
+		i = *(p++);
+		if (!GET(st->m, i)) continue;
+		set<agent> s;
+		for (agent j = 0; j < XV(st->s, i); j++)
+			s.insert(st->cs[YV(st->s, i) + j]);
+		sos.insert(s);
+        } while (--m);
+}
+
 // Contract edge between v1 and v2
 
 __attribute__((always_inline)) inline
@@ -97,8 +113,13 @@ void printcs(stack *st) {
 
 void cfss(stack *st) {
 
+	set<set<agent> > sos;
+	cs2sos(st, sos);
+
 	#ifdef DEBUG
-	printcs(st);
+	//printcs(st);
+	printsos(sos);
+	puts("");
 	#endif
 
 	chunk tmp[CMNE];

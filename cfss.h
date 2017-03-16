@@ -16,4 +16,8 @@ void maskagents(const set<agent> &s, stack *st);
 
 void cfss(stack *st);
 
+#ifdef DEBUG
+#include "io.h"
+#endif
+
 #endif /* CFSS_H_ */
