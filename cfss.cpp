@@ -124,12 +124,12 @@ void printcs(stack *st) {
 
 void cfss(stack *st) {
 
-	set<set<agent> > sos;
-	cs2sos(st, sos);
+	set<set<agent> > ccal;
+	cs2sos(st, ccal);
 
 	#ifdef DEBUG
 	//printcs(st);
-	printsos(sos);
+	printsos(ccal);
 	puts("");
 	#endif
 
