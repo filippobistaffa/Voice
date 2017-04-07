@@ -157,6 +157,8 @@ int main(int argc, char *argv[]) {
 			cfss(st, true);
 	}
 
+	vector<set<set<agent> > > C(NTD, set<set<agent> >());
+
 	free(st->st);
 	free(st);
 
