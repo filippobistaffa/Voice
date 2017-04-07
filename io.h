@@ -49,11 +49,13 @@ void printset(const set<type> &s, const char *name = NULL, const char *format = 
 
 template <typename type>
 __attribute__((always_inline)) inline
-void printsos(const set<set<type> > &sos, const char *name = NULL) {
+void printsos(const set<set<type> > &sos, const char *name = NULL, const char *format = NULL, const char *after = NULL) {
 
-	if (name) cout << name << ":" << endl;
+	if (name) printf("%s = ", name);
+	printf("[ ");
 	for (typename set<set<type> >::const_iterator it = sos.begin(); it != sos.end(); ++it)
-		printset(*it);
+		printset(*it, NULL, format, " ");
+	printf("]%s", (after) ? after : "\n");
 }
 
 // Reads the graph file

@@ -7,11 +7,12 @@
 #include "macros.h"
 #include "types.h"
 
+#ifdef DEBUG
 #include <bitset>
+#endif
 
 // Modules
 #include "io.h"
-#include "set.h"
 #include "cfss.h"
 
 #endif /* VOICE_H_ */

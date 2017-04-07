@@ -11,6 +11,9 @@
 #define GT(X, Y) (*(X) > *(Y))
 #define GE(X, Y) (*(X) >= *(Y))
 
+#define ITOP(X) (&(*(X)))
+#define ATP(V, I) ITOP((V).begin() + (I))
+
 #define XV(V, I) ((V)[2 * (I)])
 #define YV(V, I) ((V)[2 * (I) + 1])
 

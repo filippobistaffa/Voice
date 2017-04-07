@@ -1,5 +1,7 @@
 #include "cfss.h"
 
+value maxVi;
+
 void initstack(stack *st) {
 
 	st->n[N] = N;
@@ -103,7 +105,7 @@ void merge(stack *st, agent v1, agent v2) {
 
 // Print coalition structure
 
-__attribute__((always_inline)) inline
+/*__attribute__((always_inline)) inline
 void printcs(stack *st) {
 
 	const agent *p = st->n + N + 1;
@@ -120,18 +122,118 @@ void printcs(stack *st) {
         } while (--m);
 
 	puts("");
+}*/
+
+value setvalue(const set<agent> &s, const stack *st) {
+
+	value ret = 0;
+
+	for (set<agent>::const_iterator it1 = s.begin(); it1 != s.end(); ++it1) {
+		ret += st->vs[*it1];
+		for (set<agent>::const_iterator it2 = s.begin(); it2 != s.end(); ++it2)
+			ret += *it1 > *it2 ? st->ve[st->g[*it1 * N + *it2]] : 0;
+	}
+
+	return ret;
 }
 
-void cfss(stack *st) {
+void cfss(stack *st, bool outer) {
 
-	set<set<agent> > ccal;
-	cs2sos(st, ccal);
+	set<set<agent> > sos;
+	cs2sos(st, sos);
+		
+	if (outer) {
 
-	#ifdef DEBUG
-	//printcs(st);
-	printsos(ccal);
-	puts("");
-	#endif
+		// outer loop
+
+		maskagents(*(st->Xi), st->st);
+		st->st->C = &sos;
+		maxVi = -FLT_MAX;
+		cfss(st->st, false);
+		(*st->Vi)[sos] = maxVi;
+
+		#ifdef DEBUG
+		printf("vi(C) <- %f\n\n", maxVi);
+		#endif
+
+	} else {
+
+		// inner loop
+
+		set<set<agent> > EZi;
+		cal(sos, *(st->Zi), EZi);
+
+		#ifdef DEBUG
+		printsos(*(st->C), "C  ");
+		printset(*(st->Zi), "Zi ");
+		printsos(sos, "E  ");
+		printsos(EZi, "EZi");
+		printset(*(st->Yi), "Yi ");
+		puts("");
+		#endif
+
+		if (EZi == *(st->C)) {
+
+			value sum = 0;
+
+			for (set<set<agent> >::const_iterator it = sos.begin(); it != sos.end(); ++it) {
+
+				const value vC = setvalue(*it, st);
+				#ifdef DEBUG
+				printf("v(C) = v(");
+				printset(*it, NULL, NULL, ") = ");
+				printf("%f\n", vC);
+				#endif
+
+				set<agent> CmYi;
+				SETOP(set_difference, *it, *(st->Yi), CmYi);
+				const value vCmYi = setvalue(CmYi, st);
+				#ifdef DEBUG
+				printf("v(C \\ Yi) = v(");
+				printset(CmYi, NULL, NULL, ") = ");
+				printf("%f\n", vCmYi);
+				#endif
+
+				sum += (vC - vCmYi);
+			}
+
+			#ifdef DEBUG
+			printf("Σ[v(C) - v(C \\ Yi)] = %f\n", sum);
+			puts("");
+			printset(*(st->Di), "Di");
+			puts("");
+			#endif
+
+			for (set<agent>::const_iterator it = st->Di->begin(); it != st->Di->end(); ++it) {
+
+				set<set<agent> > EZj;
+				cal(sos, *ATP(*(st->Z), *it), EZj);
+				const value vjEZj = (*(st->V))[*it][EZj];
+
+				#ifdef DEBUG
+				printf("j = %u\n", *it);
+				printf("vj(EZj) = v(");
+				printsos(EZj, NULL, NULL, ") = ");
+				printf("%f\n", vjEZj);
+				#endif
+
+				sum += vjEZj;
+			}
+
+			#ifdef DEBUG
+			printf("Σ[v(C) - v(C \\ Yi)] + Σ[v(EZj)] = %f\n", sum);
+			puts("");
+			printf("Old maxVi = %f\n", maxVi);
+			#endif
+
+			if (sum > maxVi) maxVi = sum;
+
+			#ifdef DEBUG
+			printf("New maxVi = %f\n", maxVi);
+			puts("");
+			#endif
+		}
+	}
 
 	chunk tmp[CMNE];
 	memcpy(tmp, st->c, sizeof(chunk) * CMNE);
@@ -144,6 +246,6 @@ void cfss(stack *st) {
 		st[1] = st[0];
 		merge(st + 1, v1, v2);
 		contract(st + 1, v1, v2);
-		cfss(st + 1);
+		cfss(st + 1, outer);
 	}
 }

@@ -119,27 +119,45 @@ int main(int argc, char *argv[]) {
 	#ifdef DEBUG
 	puts("");
 	#endif
-	value vi[NTD];
+
+	// v_i function
+	vector<map<set<set<agent> >, value> > V(NTD, map<set<set<agent> >, value>());
 	
 	// initialise stack for CFSS
+	st->st = (stack *)malloc(sizeof(stack) * N); // inner stack to iterate through CS over X_i
 	initstack(st);
+	st->st[0] = st[0];
 
 	for (int i = NTD - 1; i >= 0; i--) {
 
-		maskagents(Z[i], st);
-
 		#ifdef DEBUG
+		printf("X_%u = ", i);
+		printset(X[i]);
 		printf("Z_%u = ", i);
 		printset(Z[i]);
-		bitset<BITSPERCHUNK> bsm(st->m[0]);
-		cout << "st->m = " << bsm << endl;
-		bitset<BITSPERCHUNK> bsc(st->c[0]);
-		cout << "st->c = " << bsc << endl << endl;
+		//bitset<BITSPERCHUNK> bsm(st->m[0]);
+		//cout << "st->m = " << bsm << endl;
+		//bitset<BITSPERCHUNK> bsc(st->c[0]);
+		//cout << "st->c = " << bsc << endl << endl;
 		#endif
 
-		cfss(st);
+		st->Xi = ATP(X, i);
+		st->st->Di = ATP(D, i);
+		st->st->Yi = ATP(Y, i);
+
+		st->st->Z = &Z;
+		st->st->Zi = ATP(Z, i);
+
+		st->st->V = &V;	
+		st->Vi = ATP(V, i);
+
+		maskagents(Z[i], st);
+
+		if (!Z[i].empty())
+			cfss(st, true);
 	}
 
+	free(st->st);
 	free(st);
 
 	return 0;

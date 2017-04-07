@@ -16,10 +16,12 @@ void initstack(stack *st);
 
 void maskagents(const set<agent> &s, stack *st);
 
-void cfss(stack *st);
+void cfss(stack *st, bool outer);
 
 #ifdef DEBUG
 #include "io.h"
 #endif
+
+#include "set.h"
 
 #endif /* CFSS_H_ */

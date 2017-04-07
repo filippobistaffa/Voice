@@ -1,9 +1,6 @@
 // Enable debug messages
 #define DEBUG
 
-// Enable coloured output
-#define COLOURS
-
 // Enable CSV output
 //#define CSV
 

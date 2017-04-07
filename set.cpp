@@ -39,6 +39,6 @@ void cal(const set<set<agent> > &scal, const set<agent> &s, set<set<agent> > &re
 	for (set<set<agent> >::const_iterator it = scal.begin(); it != scal.end(); ++it) {
 		set<agent> C = *it, i;
 		SETOP(set_intersection, C, s, i);
-		res.insert(i);
+		if (!i.empty()) res.insert(i);
 	}
 }
