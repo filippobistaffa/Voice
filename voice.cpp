@@ -157,7 +157,21 @@ int main(int argc, char *argv[]) {
 			lines1115(st, true);
 	}
 
-	vector<set<set<agent> > > C(NTD, set<set<agent> >());
+	#ifdef DEBUG
+	puts("");
+	for (agent i = 0; i < NTD; i++) {
+		printf("v%u:\n", i);
+		for(map<set<set<agent> >, value>::const_iterator it = V[i].begin(); it != V[i].end(); ++it) {
+			printf("v(");
+			printsos(it->first, NULL, NULL, ") = ");
+			printf("%f\n", it->second);
+		}
+		puts("");
+	}
+	#endif
+
+	// Ck uses 1-based numbering to follow Voice et al. paper
+	vector<set<set<agent> > > Ci(NTD + 1, set<set<agent> >());
 
 	free(st->st);
 	free(st);
