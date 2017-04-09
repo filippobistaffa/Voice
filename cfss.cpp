@@ -137,11 +137,11 @@ value setvalue(const set<agent> &s, const stack *st) {
 	return ret;
 }
 
-void cfss(stack *st, bool outer) {
+void lines1115(stack *st, bool outer) {
 
 	set<set<agent> > sos;
 	cs2sos(st, sos);
-		
+
 	if (outer) {
 
 		// outer loop
@@ -149,7 +149,7 @@ void cfss(stack *st, bool outer) {
 		maskagents(*(st->Xi), st->st);
 		st->st->C = &sos;
 		maxVi = -FLT_MAX;
-		cfss(st->st, false);
+		lines1115(st->st, false);
 		(*st->Vi)[sos] = maxVi;
 
 		#ifdef DEBUG
@@ -246,6 +246,6 @@ void cfss(stack *st, bool outer) {
 		st[1] = st[0];
 		merge(st + 1, v1, v2);
 		contract(st + 1, v1, v2);
-		cfss(st + 1, outer);
+		lines1115(st + 1, outer);
 	}
 }

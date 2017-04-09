@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
 		maskagents(Z[i], st);
 
 		if (!Z[i].empty())
-			cfss(st, true);
+			lines1115(st, true);
 	}
 
 	vector<set<set<agent> > > C(NTD, set<set<agent> >());

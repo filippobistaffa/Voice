@@ -16,7 +16,7 @@ void initstack(stack *st);
 
 void maskagents(const set<agent> &s, stack *st);
 
-void cfss(stack *st, bool outer);
+void lines1115(stack *st, bool outer);
 
 #ifdef DEBUG
 #include "io.h"
