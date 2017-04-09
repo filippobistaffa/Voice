@@ -27,12 +27,12 @@ int main(int argc, char *argv[]) {
 		printbuf(st->g + i * N, N, NULL, "% 2u");
 	puts("\nTree decomposition vertices");
 	for (agent i = 0; i < NTD; i++) {
-		printf("X_%u = ", i);
+		printf("X%u = ", i);
 		printset(X[i]);
 	}
 	puts("\nDescendants in tree decomposition");
 	for (agent i = 0; i < NTD; i++) {
-		printf("D_%u = ", i);
+		printf("D%u = ", i);
 		printset(D[i]);
 	}
 	puts("");
@@ -109,9 +109,9 @@ int main(int argc, char *argv[]) {
 	for (agent i = 0; i < NTD; i++) {
 		SETOP(set_difference, X[i], Y[i], Z[i]);
 		#ifdef DEBUG
-		printf("Y_%u = ", i);
+		printf("Y%u = ", i);
 		printset(Y[i]);
-		printf("Z_%u = ", i);
+		printf("Z%u = ", i);
 		printset(Z[i]);
 		#endif
 	}
@@ -131,9 +131,9 @@ int main(int argc, char *argv[]) {
 	for (int i = NTD - 1; i >= 0; i--) {
 
 		#ifdef DEBUG
-		printf("X_%u = ", i);
+		printf("X%u = ", i);
 		printset(X[i]);
-		printf("Z_%u = ", i);
+		printf("Z%u = ", i);
 		printset(Z[i]);
 		//bitset<BITSPERCHUNK> bsm(st->m[0]);
 		//cout << "st->m = " << bsm << endl;
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
 		st->st->Z = &Z;
 		st->st->Zi = ATP(Z, i);
 
-		st->st->V = &V;	
+		st->st->V = &V;
 		st->Vi = ATP(V, i);
 
 		maskagents(Z[i], st);
