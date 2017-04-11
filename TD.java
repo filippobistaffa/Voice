@@ -62,9 +62,13 @@ public class TD {
 		ub.setInput(g);
 		ub.run();
 		stopwatch.stop();
-		System.out.println("Heuristic : " + ub.getName());
-		System.out.println("Treewidth : " + ub.getUpperBound());
-		System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
+		if (arg.length > 2) { // CSV output
+			System.out.print(ub.getUpperBound() + ",");
+		} else {
+			System.out.println("Heuristic : " + ub.getName());
+			System.out.println("Treewidth : " + ub.getUpperBound());
+			System.out.println("Runtime   : " + stopwatch.getTime() + " ms");
+		}
 		NVertexOrder<InputData> order = ub.getPermutation();
 
 		// Exact (QuickBB)

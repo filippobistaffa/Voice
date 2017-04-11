@@ -45,7 +45,7 @@ if [ -z "${i}" ]; then
 fi
 
 td=`mktemp`
-java -cp .:* TD "$i" $td
+java -cp .:* TD "$i" $td $c
 ntd=`sed '1q;d' $td`
 
 tmp=`mktemp`
