@@ -7,10 +7,11 @@ Execution
 ----------
 Voice must be executed by means of the [`voice.sh`](voice.sh) script, i.e.,
 ```
-./voice.sh -i <filename> -o <filename>
+./voice.sh -i <filename> [-o <filename>] [-c]
 
 -i	Input graph filename
 -o	Outputs solution to file
+-c	Enable CSV output (optional)
 ```
 
 Acknowledgements

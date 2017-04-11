@@ -4,7 +4,7 @@ red='\033[0;31m'			# Red
 nc='\033[0m'				# No color
 re='^[0-9]+$'				# Regular expression to detect natural numbers
 
-usage() { echo -e "Usage: $0 -i <filename> [-o <filename>]\n-i\tInput graph filename\n-o\tOutputs solution to file (optional)\n-c\tEnable CSV output (optional)" 1>&2; exit 1; }
+usage() { echo -e "Usage: $0 -i <filename> [-o <filename>] [-c]\n-i\tInput graph filename\n-o\tOutputs solution to file (optional)\n-c\tEnable CSV output (optional)" 1>&2; exit 1; }
 
 while getopts ":i:o:c" o; do
 	case "${o}" in
