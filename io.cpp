@@ -17,6 +17,8 @@ void readg(const char *fn, edge *g, agent *a, value *vs, value *ve/*, chunk *l*/
 		vs[i] = atof(pch);
 	}
 
+	memset(ve, 0, sizeof(value) * (EFULL + 1));
+
 	for (agent i = 1; i < E + 1; i++) {
 		agent v1, v2;
 		fscanf(f, "%u %u %f", &v1, &v2, ve + i);
@@ -24,6 +26,17 @@ void readg(const char *fn, edge *g, agent *a, value *vs, value *ve/*, chunk *l*/
 		XV(a, i) = v1;
 		YV(a, i) = v2;
 	}
+
+	agent i = E + 1;
+
+	for (agent v1 = 0; v1 < N; v1++)
+		for (agent v2 = v1 + 1; v2 < N; v2++)
+			if (!g[v2 * N + v1]) {
+				g[v2 * N + v1] = g[v1 * N + v2] = i;
+				XV(a, i) = v1;
+				YV(a, i) = v2;
+				i++;
+			}
 
 	fclose(f);
 }

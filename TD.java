@@ -104,13 +104,19 @@ public class TD {
 		ptd.setInput(g);
 		ptd.run();
 		NGraph<NTDBag<InputData>> td = ptd.getDecomposition();
-		ArrayList<NTDBag<InputData>> tdvertices = new ArrayList<NTDBag<InputData>>(td.getNumberOfVertices());
+		ArrayList<NVertex<NTDBag<InputData>>> tdvertices = new ArrayList<NVertex<NTDBag<InputData>>>(td.getNumberOfVertices());
 		ArrayList<Point> points = new ArrayList<Point>(td.getNumberOfVertices());
+
+		//String dotg = DotWriter.format(g);
+		//NeatoViewer.present(dotg, "", 0, 0, false, true);
+
+		//String dottd = DotWriter.formatTD(td);
+		//NeatoViewer.present(dottd, "", 500, 0, false, true);
 
 		int i = 0;
 		for (Iterator<NVertex<NTDBag<InputData>>> it = td.getVertices(); it.hasNext();) {
-			NTDBag<InputData> ntdb = it.next().data;
-			tdvertices.add(ntdb);
+			NVertex<NTDBag<InputData>> ntdv = it.next();
+			tdvertices.add(ntdv);
 			points.add(new Point(i++, 0));
 		}
 
@@ -119,7 +125,7 @@ public class TD {
 			NVertex<NTDBag<InputData>> ntdv = it.next();
 			for (Iterator<NVertex<NTDBag<InputData>>> itn = ntdv.getNeighbors(); itn.hasNext();) {
 				NVertex<NTDBag<InputData>> neigh = itn.next();
-				int j = tdvertices.indexOf(neigh.data);
+				int j = tdvertices.indexOf(neigh);
 				if (j > i) points.get(j).y = points.get(i).y + 1;
 			}
 			i++;
@@ -129,7 +135,7 @@ public class TD {
 			public int compare(Point o1, Point o2) { return Integer.compare(o1.y, o2.y); }
 		});
 
-		ArrayList<NTDBag<InputData>> tdvo = new ArrayList<NTDBag<InputData>>();
+		ArrayList<NVertex<NTDBag<InputData>>> tdvo = new ArrayList<NVertex<NTDBag<InputData>>>();
 
 		for (i = 0; i < points.size(); i++)
 			tdvo.add(tdvertices.get(points.get(i).x));
@@ -137,8 +143,8 @@ public class TD {
 		PrintWriter writer = new PrintWriter(arg[1], "UTF-8");
 		writer.println(td.getNumberOfVertices());
 
-		for (NTDBag<InputData> ntdb : tdvo) {
-			Set<NVertex<InputData>> set = ntdb.vertices;
+		for (NVertex<NTDBag<InputData>> ntdv : tdvo) {
+			Set<NVertex<InputData>> set = ntdv.data.vertices;
 			Integer[] buf = new Integer[set.size()];
 			i = 0;
 			for (NVertex<InputData> v : set) buf[i++] = v.data.id;
@@ -147,13 +153,16 @@ public class TD {
 		}
 
 		i = 0;
-		for (Iterator<NVertex<NTDBag<InputData>>> it = td.getVertices(); it.hasNext();) {
-			NVertex<NTDBag<InputData>> ntdv = it.next();
-			Integer[] buf = new Integer[ntdv.getNumberOfNeighbors() - (i == 0 ? 0 : 1)];
+		for (NVertex<NTDBag<InputData>> ntdv : tdvo) {
+			int desc = 0;
+			for (Iterator<NVertex<NTDBag<InputData>>> itn = ntdv.getNeighbors(); itn.hasNext();)
+				if (tdvo.indexOf(itn.next()) > i)
+					desc++;
+			Integer[] buf = new Integer[desc];
 			int j = 0;
 			for (Iterator<NVertex<NTDBag<InputData>>> itn = ntdv.getNeighbors(); itn.hasNext();) {
 				NVertex<NTDBag<InputData>> neigh = itn.next();
-				int k = tdvo.indexOf(neigh.data);
+				int k = tdvo.indexOf(neigh);
 				if (k > i) buf[j++] = k;
 			}
 			String str = Arrays.toString(buf).replace(",", "");
@@ -162,11 +171,5 @@ public class TD {
 		}
 
 		writer.close();
-
-		//String dotg = DotWriter.format(g);
-		//NeatoViewer.present(dotg, "", 0, 0, false, true);
-
-		//String dottd = DotWriter.formatTD(td);
-		//NeatoViewer.present(dottd, "", 500, 0, false, true);
 	}
 }

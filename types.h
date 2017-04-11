@@ -16,7 +16,8 @@ typedef float value;
 
 #define CEIL(X, Y) (1 + (((X) - 1) / (Y)))
 #define CEILBPC(X) CEIL(X, BITSPERCHUNK)
-#define CMNE CEILBPC((N) > (E) ? (N) : (E))
+#define EFULL (N * (N - 1) / 2)
+#define CMNE CEILBPC((N) > (EFULL) ? (N) : (EFULL))
 
 #include <set>
 #include <map>
@@ -26,11 +27,11 @@ using namespace std;
 typedef struct __attribute__((aligned(128))) stack {
 
 	// CFSS
-	agent a[2 * (E + 1)], n[2 * N + 1];
-	value vs[N], ve[E + 1];
+	agent a[2 * (EFULL + 1)], n[2 * N + 1];
+	value vs[N], ve[EFULL + 1];
 	chunk c[CMNE], m[CMNE];
 	agent s[2 * N], cs[N];
-	edge g[N * N];
+	edge g[N * N], *isg;
 
 	// Voice
 	stack *st;
@@ -39,6 +40,7 @@ typedef struct __attribute__((aligned(128))) stack {
 	set<agent> *Di, *Xi, *Yi, *Zi;
 	map<set<set<agent> >, value> *Vi;
 	vector<map<set<set<agent> >, value> > *V;
+	set<set<agent> > *Cim1, *Ci;
 
 } stack;
 

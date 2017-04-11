@@ -1,8 +1,5 @@
 // Enable debug messages
-#define DEBUG
-
-// Enable CSV output
-//#define CSV
+//#define DEBUG
 
 #ifdef CSV
 #define SILENT

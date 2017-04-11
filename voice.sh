@@ -4,9 +4,9 @@ red='\033[0;31m'			# Red
 nc='\033[0m'				# No color
 re='^[0-9]+$'				# Regular expression to detect natural numbers
 
-usage() { echo -e "Usage: $0 -i <filename> [-o <filename>]\n-i\tInput graph filename\n-o\tOutputs solution to file (optional)" 1>&2; exit 1; }
+usage() { echo -e "Usage: $0 -i <filename> [-o <filename>]\n-i\tInput graph filename\n-o\tOutputs solution to file (optional)\n-c\tEnable CSV output (optional)" 1>&2; exit 1; }
 
-while getopts ":i:o:" o; do
+while getopts ":i:o:c" o; do
 	case "${o}" in
 	i)
 		i=${OPTARG}
@@ -27,6 +27,9 @@ while getopts ":i:o:" o; do
 		else
 			rm $out
 		fi
+		;;
+	c)
+		c=1
 		;;
 	\?)
 		echo -e "${red}-$OPTARG is not a valid option!${nc}\n" 1>&2; 
@@ -53,6 +56,11 @@ e=$(( $e - $n ))
 echo "#define E $e" > $tmp
 echo "#define N $n" >> $tmp
 echo "#define NTD $ntd" >> $tmp
+
+if [ ! -z "${c}" ]
+then
+	echo "#define CSV" >> $tmp
+fi
 
 if [ ! -z $out ]
 then

@@ -27,12 +27,12 @@ int main(int argc, char *argv[]) {
 		printbuf(st->g + i * N, N, NULL, "% 2u");
 	puts("\nTree decomposition vertices");
 	for (agent i = 0; i < NTD; i++) {
-		printf("X_%u = ", i);
+		printf("X%u = ", i);
 		printset(X[i]);
 	}
 	puts("\nDescendants in tree decomposition");
 	for (agent i = 0; i < NTD; i++) {
-		printf("D_%u = ", i);
+		printf("D%u = ", i);
 		printset(D[i]);
 	}
 	puts("");
@@ -96,6 +96,9 @@ int main(int argc, char *argv[]) {
 	cal(qcal, qp, qcalq);
 	printsos(qcalq, "qcalq");*/
 
+	struct timeval t1, t2;
+	gettimeofday(&t1, NULL);
+
 	vector<set<agent> > Y(NTD, set<agent>());
 	vector<set<agent> > Z(NTD, set<agent>());
 	vector<set<agent> > XU(NTD, set<agent>());
@@ -109,9 +112,9 @@ int main(int argc, char *argv[]) {
 	for (agent i = 0; i < NTD; i++) {
 		SETOP(set_difference, X[i], Y[i], Z[i]);
 		#ifdef DEBUG
-		printf("Y_%u = ", i);
+		printf("Y%u = ", i);
 		printset(Y[i]);
-		printf("Z_%u = ", i);
+		printf("Z%u = ", i);
 		printset(Z[i]);
 		#endif
 	}
@@ -131,9 +134,9 @@ int main(int argc, char *argv[]) {
 	for (int i = NTD - 1; i >= 0; i--) {
 
 		#ifdef DEBUG
-		printf("X_%u = ", i);
+		printf("X%u = ", i);
 		printset(X[i]);
-		printf("Z_%u = ", i);
+		printf("Z%u = ", i);
 		printset(Z[i]);
 		//bitset<BITSPERCHUNK> bsm(st->m[0]);
 		//cout << "st->m = " << bsm << endl;
@@ -148,16 +151,79 @@ int main(int argc, char *argv[]) {
 		st->st->Z = &Z;
 		st->st->Zi = ATP(Z, i);
 
-		st->st->V = &V;	
+		st->st->V = &V;
 		st->Vi = ATP(V, i);
 
 		maskagents(Z[i], st);
 
-		if (!Z[i].empty())
-			cfss(st, true);
+		lines1115(st, true);
 	}
 
-	vector<set<set<agent> > > C(NTD, set<set<agent> >());
+	#ifdef DEBUG
+	for (agent i = 0; i < NTD; i++) {
+		printf("v%u:\n", i);
+		for(map<set<set<agent> >, value>::const_iterator it = V[i].begin(); it != V[i].end(); ++it) {
+			printf("v(");
+			printsos(it->first, NULL, NULL, ") = ");
+			printf("%f\n", it->second);
+		}
+		puts("");
+	}
+	#endif
+
+	// C uses 1-based numbering to follow Voice et al. paper
+	vector<set<set<agent> > > C(NTD + 1, set<set<agent> >());
+
+	for (agent i = 0; i < NTD; i++) {
+
+		#ifdef DEBUG
+		printf("X%u = ", i);
+		printset(X[i]);
+		printf("Y%u = ", i);
+		printset(Y[i]);
+		printf("Z%u = ", i);
+		printset(Z[i]);
+		printf("D%u = ", i);
+		printset(D[i]);
+		puts("");
+		#endif
+
+		st->Di = ATP(D, i);
+		st->Xi = ATP(X, i);
+		st->Yi = ATP(Y, i);
+		st->Z = &Z;
+		st->Zi = ATP(Z, i);
+		st->Cim1 = ATP(C, i);
+		st->V = &V;
+		st->Vi = ATP(V, i);
+
+		set<set<agent> > Ci;
+		st->Ci = &Ci;
+
+		maskagents(X[i], st);
+		lines1721(st);
+		C[i + 1] = Ci;	
+
+		#ifdef DEBUG
+		printf("C%u = ", i);
+		printsos(Ci);
+		puts("");
+		#endif
+	}
+
+	gettimeofday(&t2, NULL);
+	value opt = 0;
+
+	for (set<set<agent> >::const_iterator it = C[NTD].begin(); it != C[NTD].end(); ++it)
+		opt += setvalue(*it, st->g, st->vs, st->ve);
+
+	#ifdef CSV
+	printf("%s,%f,%f\n", argv[1], opt, (double)(t2.tv_usec - t1.tv_usec) / 1e6 + t2.tv_sec - t1.tv_sec);
+	#else
+	printsos(C[NTD], "Solution coalition structure");
+	printf("Optimal value = %f\n", opt);
+	printf("Clock elapsed time = %f\n", (double)(t2.tv_usec - t1.tv_usec) / 1e6 + t2.tv_sec - t1.tv_sec);
+	#endif
 
 	free(st->st);
 	free(st);
